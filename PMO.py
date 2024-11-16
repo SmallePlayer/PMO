@@ -5,6 +5,7 @@ import base64
 import numpy as np
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
+import uart
 
 
 class PMO:
@@ -81,3 +82,10 @@ class PMO:
         nparray = np.frombuffer(img, np.uint8)
         frame = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         return frame
+
+    def uart_send(self):
+        uart.write(data)
+
+    def uart_recv(self):
+        data = uart.read()
+        print(data)
