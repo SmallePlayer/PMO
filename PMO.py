@@ -45,16 +45,16 @@ class PMO:
                    self.name_topic
                    )
 
-    def publisher_frame(self):
+    def publish_frame(self,video_path):
         context = zmq.Context()
         socket = context.socket(zmq.PUB)
         socket.bind(f"tcp://{self.ip_address}:{self.port_host}")
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(video_path)
         while True:
             encode_frame = PMO.__capture_camera(self,cap)
             socket.send_string(f"{self.name_topic} {encode_frame}")
 
-    def subscriber_frame(self,yolo: bool):
+    def subscriber_frame(self):
         context = zmq.Context()
         socket = context.socket(zmq.SUB)
         socket.connect(f"tcp://{self.ip_address}:{self.port_host}")
@@ -63,6 +63,7 @@ class PMO:
             data = socket.recv_string()
             topic, encode_frame = data.split(' ',maxsplit=1)
             frame = PMO.__decoding_frame(self,encode_frame)
+            cv2.imshow("frame", frame)
 
     def __capture_camera(self, cap):
         ret, frame = cap.read()
