@@ -4,7 +4,6 @@ import struct
 def read():
     ser_read = serial.Serial('/dev/ttyUSB0', 115200)
 
-
     array_size_bytes = ser_read.read(2)
     if len(array_size_bytes) != 2:
         print(f"Не удалось прочитать размер массива: {len(array_size_bytes)}")
