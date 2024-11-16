@@ -64,6 +64,11 @@ class PMO:
             topic, encode_frame = data.split(' ',maxsplit=1)
             frame = PMO.__decoding_frame(self,encode_frame)
             cv2.imshow("frame", frame)
+            if cv2.waitKey(1) == ord("q"):
+                break
+
+        cv2.waitKey()
+        cv2.destroyAllWindows()
 
     def __capture_camera(self, cap):
         ret, frame = cap.read()
