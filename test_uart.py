@@ -1,6 +1,7 @@
 import PMO
 import uart
 
+
 def main():
     data = uart.read()
     print(data)
