@@ -14,7 +14,7 @@ class PMO:
         self.port_host = port
         self.name_topic = topic
 
-    def publish_string(self, data, delay):
+    def publish_string(self, data: str, delay: int):
         context = zmq.Context()
         socket = context.socket(zmq.PUB)
         socket.bind(f"tcp://{self.ip_address}:{self.port_host}")
@@ -32,7 +32,7 @@ class PMO:
             data = socket.recv_string()
             return data
 
-    def publish_video(self, video_path, show):
+    def publish_video(self, video_path, show: bool):
         video_potok(video_path,
                     self.ip_address,
                     self.port_host,
@@ -84,7 +84,7 @@ class PMO:
         return frame
 
     def uart_send(self):
-        uart.write(data)
+        uart.write()
 
     def uart_recv(self):
         data = uart.read()
