@@ -1,37 +1,38 @@
 import serial
-import struct
+import time
 
-def read():
-    ser_read = serial.Serial('/dev/ttyUSB0', 115200)
-
-    array_size_bytes = ser_read.read(2)
-    if len(array_size_bytes) != 2:
-        print(f"Не удалось прочитать размер массива: {len(array_size_bytes)}")
-        return None
+# Настройка подключения к COM-порту
+ser = serial.Serial('/dev/ttyACM0', 115200)
+#time.sleep(2)  # Ожидание инициализации соединения
 
 
-    array_size = struct.unpack('<H',array_size_bytes)[0]
-    print(f"Принят размер массива: {array_size}")
+def send_array(arr):
+    """Отправка массива из 4 целых чисел."""
+    ser.write(f"{arr[0]} {arr[1]} {arr[2]} {arr[3]}\n".encode())
 
-    received_array = []
-    for _ in range(array_size):
-        element_bytes = ser_read.read(2)
-        if len(element_bytes) != 2:
-            print("Не удалось прочитать элемент массива")
-            break
 
-        element = struct.unpack('<h',element_bytes)[0]
-        received_array.append(element)
-    print(f"Received array: {received_array}")
-    return  received_array
+def read_response():
+    """Чтение ответа от Arduino."""
+    response = []
+    line = ser.readline().decode().strip()
+    parts = line.split()
+    for part in parts:
+        try:
+            value = int(part)
+            response.append(value)
+        except ValueError:
+            pass
+    return response
 
-def write(received_array):
-    ser_write = serial.Serial('/dev/ttyUSB0',115200)
-    response_array = [x*2 for x in received_array]
-    response_length = len(response_array)
 
-    ser_write.write(struct.pack('<H',response_length))
+if __name__ == "__main__":
+    while True:
+        # Массив для отправки
+        data_to_send = [60, 20, 30, 40]
 
-    for value in response_array:
-        ser_write.write(struct.pack('<h',value))
-    print(f"Sent Response: {response_array}")
+        print("Отправляю данные:", data_to_send)
+        send_array(data_to_send)  # Отправка массива
+
+        # Чтение и вывод полученного массива
+        received_data = read_response()
+        print("Получил ответ:", received_data,type(received_data[0]))
