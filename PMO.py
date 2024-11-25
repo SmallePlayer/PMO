@@ -7,11 +7,7 @@ import uart
 import yolo_detect
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
-
 from ultralytics import YOLO
-
-
-
 
 class PMO:
     def __init__(self, ip_addr: str, port: str, topic: str):
@@ -97,9 +93,8 @@ class PMO:
 
     def yolo_detect(self, version: str, weight: str, frame, show: bool):
         model = YOLO(f'yolo{version}{weight}.pt')
-        while True:
-            results = model.predict(source=frame, show=show, imgsz=640)
-            result = results[0]
-            for box in result.boxes:
-                class_id = box.cls[0].item()
-                return class_id
+        results = model.predict(source=frame, show=show, imgsz=640)
+        result = results[0]
+        for box in result.boxes:
+            class_id = box.cls[0].item()
+            return class_id
