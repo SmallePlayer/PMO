@@ -3,9 +3,14 @@ import time
 import cv2
 import base64
 import numpy as np
+import uart
+import yolo_detect
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
-import uart
+
+from ultralytics import YOLO
+
+
 
 
 class PMO:
@@ -46,7 +51,7 @@ class PMO:
                    self.name_topic
                    )
 
-    def publish_frame(self,video_path):
+    def publish_frame(self, video_path):
         context = zmq.Context()
         socket = context.socket(zmq.PUB)
         socket.bind(f"tcp://{self.ip_address}:{self.port_host}")
@@ -62,10 +67,10 @@ class PMO:
         socket.setsockopt_string(zmq.SUBSCRIBE, self.name_topic)
         while True:
             data = socket.recv_string()
-            topic, encode_frame = data.split(' ',maxsplit=1)
-            frame = PMO.__decoding_frame(self,encode_frame)
-            cv2.imshow("frame", frame)
-            if cv2.waitKey(1) == ord("q"):
+            topic, encode_frame = data.split(' ', maxsplit=1)
+            frame = PMO.__decoding_frame(self, encode_frame)
+            cv2.imshow('frame', frame)
+            if cv2.waitKey(1) == ord('q'):
                 break
 
         cv2.waitKey()
@@ -77,7 +82,7 @@ class PMO:
         jpg_frame_text = base64.b64encode(encoded_frame).decode('utf-8')
         return jpg_frame_text
 
-    def __decoding_frame(self,encode_frame):
+    def __decoding_frame(self, encode_frame):
         img = base64.b64decode(encode_frame)
         nparray = np.frombuffer(img, np.uint8)
         frame = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
@@ -89,3 +94,12 @@ class PMO:
     def uart_recv(self):
         data = uart.read()
         print(data)
+
+    def yolo_detect(self, version: str, weight: str, frame, show: bool):
+        model = YOLO(f'yolo{version}{weight}.pt')
+        while True:
+            results = model.predict(source=frame, show=show, imgsz=640)
+            result = results[0]
+            for box in result.boxes:
+                class_id = box.cls[0].item()
+                return class_id
