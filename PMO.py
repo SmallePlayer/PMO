@@ -98,3 +98,4 @@ class PMO:
         for box in result.boxes:
             class_id = box.cls[0].item()
             return class_id
+
