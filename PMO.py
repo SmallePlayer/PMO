@@ -3,9 +3,8 @@ import time
 import cv2
 import base64
 import numpy as np
-
 import uart
-from uart import  *
+import yolo_detect
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
@@ -85,12 +84,12 @@ class PMO:
         frame = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         return frame
 
-    def uart_send(self, data):
-        uart.send_array(data)
+    def uart_send(self):
+        uart.write()
 
-    def uart_read(self):
-        response = uart.read_response()
-        return response
+    def uart_recv(self):
+        data = uart.read()
+        print(data)
 
     def yolo_detect(self, version: str, weight: str, frame, show: bool):
         model = YOLO(f'yolo{version}{weight}.pt')
