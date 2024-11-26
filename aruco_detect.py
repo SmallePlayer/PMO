@@ -9,7 +9,6 @@ def aruco(frame, show):
         parameters = cv2.aruco.DetectorParameters()
 
         detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
-
         corners, ids, rejected = detector.detectMarkers(gray)
 
         if show == True:
