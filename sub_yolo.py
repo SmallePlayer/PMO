@@ -1,4 +1,4 @@
-from PMO import *
+import PMO
 import config
 from ultralytics import YOLO
 import  time

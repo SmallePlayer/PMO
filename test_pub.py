@@ -1,6 +1,5 @@
-from PMO import PMO
+from PMO import *
 import config
-
 
 topic = "krolik"
 

@@ -3,7 +3,6 @@ import time
 import cv2
 import base64
 import numpy as np
-
 import aruco_detect
 import config
 from publish_pyobj_video import video_potok

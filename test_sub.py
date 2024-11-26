@@ -1,9 +1,9 @@
-from PMO import PMO
+from PMO import *
 import config
 
 topic = "krolik"
 
-pub = PMO(config.host, config.port, topic)
+sub = PMO(config.host, config.port, topic)
 
-pub.subscriber_frame()
+sub.subscriber_frame()
 
