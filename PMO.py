@@ -3,14 +3,15 @@ import time
 import cv2
 import base64
 import numpy as np
+
+import config
 import uart
-import yolo_detect
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
 
 class PMO:
-    def __init__(self, ip_addr: str, port: str, topic: str):
+    def __init__(self, ip_addr=config.host, port=config.port, topic="pmo"):
         self.ip_address = ip_addr
         self.port_host = port
         self.name_topic = topic
