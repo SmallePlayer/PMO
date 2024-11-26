@@ -3,6 +3,7 @@ import time
 import cv2
 import base64
 import numpy as np
+import uart
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
@@ -47,7 +48,6 @@ class PMO:
                    )
 
     def publish_frame(self, video_path):
-        print("start")
         context = zmq.Context()
         socket = context.socket(zmq.PUB)
         socket.bind(f"tcp://{self.ip_address}:{self.port_host}")
@@ -83,6 +83,13 @@ class PMO:
         nparray = np.frombuffer(img, np.uint8)
         frame = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         return frame
+
+    def uart_send(self):
+        uart.write()
+
+    def uart_recv(self):
+        data = uart.read()
+        print(data)
 
     def yolo_detect(self, version: str, weight: str, frame, show: bool):
         model = YOLO(f'yolo{version}{weight}.pt')
