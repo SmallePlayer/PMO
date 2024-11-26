@@ -71,6 +71,7 @@ class PMO:
             if cv2.waitKey(1) == ord('q'):
                 break
 
+
         cv2.waitKey()
         cv2.destroyAllWindows()
 
