@@ -3,13 +3,12 @@ import time
 import cv2
 import base64
 import numpy as np
-import aruco_detect
+
 import config
 import uart
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
-import aruco
 
 
 class PMO:
@@ -101,7 +100,3 @@ class PMO:
         for box in result.boxes:
             class_id = box.cls[0].item()
             return class_id
-
-    def aruco_detect(self,frame, bool: show):
-        ids = aruco_detect.aruco(frame,show)
-        return ids
