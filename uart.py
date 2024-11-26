@@ -1,13 +1,13 @@
 import serial
 import time
 
-# Настройка подключения к COM-порту
 ser = serial.Serial('/dev/ttyACM0', 115200)
 #time.sleep(2)  # Ожидание инициализации соединения
 
 
 def send_array(arr):
     """Отправка массива из 4 целых чисел."""
+    print(f"Отправляю данные: {arr}")
     ser.write(f"{arr[0]} {arr[1]} {arr[2]} {arr[3]}\n".encode())
 
 
@@ -23,16 +23,3 @@ def read_response():
         except ValueError:
             pass
     return response
-
-
-if __name__ == "__main__":
-    while True:
-        # Массив для отправки
-        data_to_send = [60, 20, 30, 40]
-
-        print("Отправляю данные:", data_to_send)
-        send_array(data_to_send)  # Отправка массива
-
-        # Чтение и вывод полученного массива
-        received_data = read_response()
-        print("Получил ответ:", received_data,type(received_data[0]))
