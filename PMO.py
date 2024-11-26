@@ -8,6 +8,7 @@ from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
 
+
 class PMO:
     def __init__(self, ip_addr: str, port: str, topic: str):
         self.ip_address = ip_addr
