@@ -4,8 +4,8 @@ import cv2
 import base64
 import numpy as np
 
+import aruco_detect
 import config
-import uart
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
@@ -67,10 +67,11 @@ class PMO:
             data = socket.recv_string()
             topic, encode_frame = data.split(' ', maxsplit=1)
             frame = PMO.__decoding_frame(self, encode_frame)
-            cv2.imshow('frame', frame)
+            #cv2.imshow('frame', frame)
             if cv2.waitKey(1) == ord('q'):
                 break
 
+            return frame
 
         cv2.waitKey()
         cv2.destroyAllWindows()
@@ -87,13 +88,6 @@ class PMO:
         frame = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         return frame
 
-    def uart_send(self):
-        uart.write()
-
-    def uart_recv(self):
-        data = uart.read()
-        print(data)
-
     def yolo_detect(self, version: str, weight: str, frame, show: bool):
         model = YOLO(f'yolo{version}{weight}.pt')
         results = model.predict(source=frame, show=show, imgsz=640)
@@ -101,3 +95,7 @@ class PMO:
         for box in result.boxes:
             class_id = box.cls[0].item()
             return class_id
+
+    def aruco_detect_id(self,frame,show):
+        ids = aruco_detect.aruco(frame,show)
+        return ids
