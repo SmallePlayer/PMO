@@ -3,7 +3,7 @@ import time
 import cv2
 import base64
 import numpy as np
-import uart
+
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
