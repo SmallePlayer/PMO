@@ -4,14 +4,11 @@ import cv2
 import base64
 import numpy as np
 import aruco_detect
-import config
-from publish_pyobj_video import video_potok
-from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
 
 
 class PMO:
-    def __init__(self, ip_addr=config.host, port=config.port, topic="pmo"):
+    def __init__(self, ip_addr="localhost", port="2000", topic="pmo"):
         self.ip_address = ip_addr
         self.port_host = port
         self.name_topic = topic
@@ -33,20 +30,6 @@ class PMO:
         while True:
             data = socket.recv_string()
             return data
-
-    def publish_video(self, video_path, show: bool):
-        video_potok(video_path,
-                    self.ip_address,
-                    self.port_host,
-                    self.name_topic,
-                    show
-                    )
-
-    def subscriber_video(self):
-        video_read(self.ip_address,
-                   self.port_host,
-                   self.name_topic
-                   )
 
     def publish_frame(self, video_path):
         context = zmq.Context()
