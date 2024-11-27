@@ -58,6 +58,22 @@ class PMO:
         cv2.waitKey()
         cv2.destroyAllWindows()
 
+    def subscriber_frame(self, show: bool):
+        context = zmq.Context()
+        socket = context.socket(zmq.SUB)
+        socket.connect(f"tcp://{self.ip_address}:{self.port_host}")
+        socket.setsockopt_string(zmq.SUBSCRIBE, self.name_topic)
+        detector = cv2.QRCodeDetector()
+        while True:
+            data = socket.recv_string()
+            topic, encode_frame = data.split(' ', maxsplit=1)
+            frame = PMO.__decoding_frame(self, encode_frame)
+            data , _ = detector.detectAndDecode()
+            if show == True:
+                print(data)
+            return data
+
+
     def __capture_camera(self, cap):
         ret, frame = cap.read()
         success, encoded_frame = cv2.imencode('.jpg', frame)
