@@ -2,13 +2,13 @@ import serial
 import time
 
 ser = serial.Serial('/dev/ttyACM0', 115200)
-#time.sleep(2)  # Ожидание инициализации соединения
+time.sleep(2)  # Ожидание инициализации соединения
 
 
 def send_array(arr):
     """Отправка массива из 4 целых чисел."""
-    print(f"Отправляю данные: {arr}")
-    ser.write(f"{arr[0]} {arr[1]} {arr[2]} {arr[3]}\n".encode())
+    #print(f"Отправляю данные: {arr}")
+    ser.write(f"{arr[0]} {arr[1]} {arr[2]} {arr[3]}".encode())
 
 
 def read_response():
