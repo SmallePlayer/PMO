@@ -3,7 +3,6 @@ import config
 
 topic = "krolik"
 
-pub = PMO(config.host, config.port, topic)
+pub = PMO("192.168.43.73", "2000", topic)
 
 pub.subscriber_frame()
-

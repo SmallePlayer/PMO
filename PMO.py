@@ -3,7 +3,7 @@ import time
 import cv2
 import base64
 import numpy as np
-import uart
+
 from publish_pyobj_video import video_potok
 from subscriver_pyobj_video import video_read
 from ultralytics import YOLO
@@ -47,7 +47,7 @@ class PMO:
                    self.name_topic
                    )
 
-    def publish_frame(self, video_path):
+    def publish_frame(self, video_path, qr_show):
         context = zmq.Context()
         socket = context.socket(zmq.PUB)
         socket.bind(f"tcp://{self.ip_address}:{self.port_host}")
@@ -72,6 +72,25 @@ class PMO:
         cv2.waitKey()
         cv2.destroyAllWindows()
 
+    def subscriber_qr(self, show: bool):
+        context = zmq.Context()
+        socket = context.socket(zmq.SUB)
+        socket.connect(f"tcp://{self.ip_address}:{self.port_host}")
+        socket.setsockopt_string(zmq.SUBSCRIBE, self.name_topic)
+        detector = cv2.QRCodeDetector()
+        while True:
+            data = socket.recv_string()
+            topic, encode_frame = data.split(' ', maxsplit=1)
+            frame = PMO.__decoding_frame(self, encode_frame)
+            data, bbox, _ = detector.detectAndDecode(frame)
+            if show == True:
+                print(f"data info: {data}")
+
+
+
+
+
+
     def __capture_camera(self, cap):
         ret, frame = cap.read()
         success, encoded_frame = cv2.imencode('.jpg', frame)
@@ -84,12 +103,6 @@ class PMO:
         frame = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         return frame
 
-    def uart_send(self):
-        uart.write()
-
-    def uart_recv(self):
-        data = uart.read()
-        print(data)
 
     def yolo_detect(self, version: str, weight: str, frame, show: bool):
         model = YOLO(f'yolo{version}{weight}.pt')
