@@ -68,7 +68,7 @@ class PMO:
             data = socket.recv_string()
             topic, encode_frame = data.split(' ', maxsplit=1)
             frame = PMO.__decoding_frame(self, encode_frame)
-            data , _ = detector.detectAndDecode()
+            data, bbox, _ = detector.detectAndDecode(frame)
             if show == True:
                 print(data)
             return data

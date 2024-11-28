@@ -5,7 +5,7 @@ import numpy as np
 def aruco(frame, show):
     while True:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+        aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_250)
         parameters = cv2.aruco.DetectorParameters()
 
         detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
