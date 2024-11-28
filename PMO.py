@@ -58,7 +58,7 @@ class PMO:
         cv2.waitKey()
         cv2.destroyAllWindows()
 
-    def subscriber_frame(self, show: bool):
+    def subscriber_qr(self, show: bool):
         context = zmq.Context()
         socket = context.socket(zmq.SUB)
         socket.connect(f"tcp://{self.ip_address}:{self.port_host}")
