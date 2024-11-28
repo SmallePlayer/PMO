@@ -1,10 +1,9 @@
 from PMO import *
-import config
 import  time
 
 topic = "krolik"
 
-sub = PMO("192.168.43.178", "2000", topic)
+sub = PMO("192.168.1.139", "2000", topic)
 
 while True:
     frame = sub.subscriber_frame()
