@@ -68,7 +68,7 @@ class PMO:
             data = socket.recv_string()
             topic, encode_frame = data.split(' ', maxsplit=1)
             frame = PMO.__decoding_frame(self, encode_frame)
-            data , bbox, _ = detector.detectAndDecode(frame)
+            data , _ = detector.detectAndDecode()
             if show == True:
                 print(data)
             return data
@@ -94,6 +94,6 @@ class PMO:
             class_id = box.cls[0].item()
             return class_id
 
-    def aruco_detect_id(self,frame,show: bool):
+    def aruco_detect_id(self,frame,show):
         ids = aruco_detect.aruco(frame,show)
         return ids
