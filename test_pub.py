@@ -1,5 +1,4 @@
 from PMO import *
-import config
 
 topic = "krolik"
 
