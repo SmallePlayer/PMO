@@ -3,7 +3,7 @@ import numpy as np
 
 curent_ovosh = " "
 
-def detect_ovosh(frame):
+def detect_ovosh(frame, show):
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -19,13 +19,14 @@ def detect_ovosh(frame):
     lower_green = np.array([0, 99, 0])
     upper_green = np.array([255, 241, 163])
 
-
     mask_red = cv2.inRange(hsv, lower_red, upper_red)
-    cv2.imshow("frame red", mask_red)
     mask_yellow = cv2.inRange(hsv, lower_yellow, upper_yellow)
-    cv2.imshow("frame yellow", mask_yellow)
     mask_green = cv2.inRange(hsv, lower_green, upper_green)
-    cv2.imshow("frame green", mask_green)
+
+    if show == True:
+        cv2.imshow("frame red", mask_red)
+        cv2.imshow("frame yellow", mask_yellow)
+        cv2.imshow("frame green", mask_green)
 
 
     pixel_count_red = cv2.countNonZero(mask_red)
